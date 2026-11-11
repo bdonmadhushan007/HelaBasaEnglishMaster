@@ -1,41 +1,38 @@
-
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const HelaBasaApp());
+  runApp(const HelaEnglishApp());
 }
 
-const Color navy = Color(0xFF172554);
-const Color blue = Color(0xFF4057D6);
-const Color purple = Color(0xFF7652D6);
-const Color pageBg = Color(0xFFF3F5FF);
+const Color ink = Color(0xFF172554);
+const Color blue = Color(0xFF4056C8);
+const Color violet = Color(0xFF7654D6);
+const Color page = Color(0xFFF3F5FF);
+const Color cardColor = Color(0xFFFFFFFF);
 
-class HelaBasaApp extends StatelessWidget {
-  const HelaBasaApp({super.key});
+class HelaEnglishApp extends StatelessWidget {
+  const HelaEnglishApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Hela English',
       debugShowCheckedModeBanner: false,
-      title: 'Hela Basa English Master',
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: pageBg,
+        scaffoldBackgroundColor: page,
         colorScheme: ColorScheme.fromSeed(seedColor: blue),
+        fontFamily: 'Roboto',
       ),
       home: const HomePage(),
     );
   }
 }
 
-// LESSON DATA
-
 class Lesson {
   final String title;
   final String english;
   final String sinhala;
-
   const Lesson(this.title, this.english, this.sinhala);
 }
 
@@ -139,9 +136,8 @@ const List<Lesson> lessons = [
   Lesson('Bank', 'I want to open an account.', 'මට ගිණුමක් ආරම්භ කරන්න ඕන.'),
   Lesson('Making Plans', 'Let us go together.', 'අපි එකට යමු.'),
   Lesson('Review', 'Practice makes you better.', 'පුහුණුවෙන් ඔයා තවත් දක්ෂ වෙනවා.'),
+  Lesson('At the Pharmacy', 'I need some medicine.', 'මට බෙහෙත් ටිකක් අවශ්‍යයි.'),
 ];
-
-// HOME PAGE
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -149,333 +145,565 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: pageBg,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _hero(context),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 24, 18, 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Start Learning',
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                        color: navy,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: _hero()),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 25, 20, 30),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  const Text('Start Learning', style: TextStyle(
+                    color: ink, fontSize: 24, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 5),
+                  Text('ඔයාගේ English ගමන අදම පටන් ගන්න!',
+                    style: TextStyle(color: Colors.blueGrey.shade600, fontSize: 15)),
+                  const SizedBox(height: 18),
+                  _FeatureCard(
+                    title: 'English Lessons',
+                    subtitle: 'පාඩම් 1–100 පියවරෙන් පියවර ඉගෙන ගන්න',
+                    icon: Icons.menu_book_rounded,
+                    color: const Color(0xFF4562D5),
+                    onTap: () => _open(context, const LessonsPage()),
+                  ),
+                  _FeatureCard(
+                    title: 'Vocabulary',
+                    subtitle: 'අලුත් English වචන සහ සිංහල තේරුම්',
+                    icon: Icons.auto_stories_rounded,
+                    color: const Color(0xFF8556D8),
+                    onTap: () => _open(context, const VocabularyPage()),
+                  ),
+                  _FeatureCard(
+                    title: 'English Quiz',
+                    subtitle: 'ඔයාගේ දැනුම පරීක්ෂා කරගන්න',
+                    icon: Icons.emoji_events_rounded,
+                    color: const Color(0xFFE69A32),
+                    onTap: () => _open(context, const QuizPage()),
+                  ),
+                  _FeatureCard(
+                    title: 'Speaking Practice',
+                    subtitle: 'දිනපතා English කතා කිරීම පුහුණු වෙන්න',
+                    icon: Icons.record_voice_over_rounded,
+                    color: const Color(0xFF0C9B8B),
+                    onTap: () => _open(context, const SpeakingPage()),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [ink, blue, violet],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
+                      borderRadius: BorderRadius.circular(26),
+                      boxShadow: [BoxShadow(
+                        color: blue.withOpacity(.28),
+                        blurRadius: 22, offset: const Offset(0, 12))],
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'ඔයාගේ English ගමන අදම පටන් ගන්න!',
-                      style: TextStyle(
-                        color: Colors.blueGrey.shade600,
-                        fontSize: 15,
-                      ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('🚀 Your English Journey', style: TextStyle(
+                          color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+                        Text('Practice every day. Small steps make big progress!',
+                          style: TextStyle(color: Colors.white70, fontSize: 14)),
+                        SizedBox(height: 10),
+                        Text('දවසින් දවස ඔයාගේ ඉංග්‍රීසි දියුණු කරගමු!',
+                          style: TextStyle(color: Colors.white, fontSize: 14)),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    _menuCard(
-                      context,
-                      'English Lessons',
-                      'පාඩම් 1–100 ඉගෙන ගන්න',
-                      Icons.menu_book_rounded,
-                      const Color(0xFF4361EE),
-                      const LessonsPage(),
-                    ),
-                    _menuCard(
-                      context,
-                      'Vocabulary',
-                      'අලුත් English වචන ඉගෙන ගන්න',
-                      Icons.auto_stories_rounded,
-                      const Color(0xFF8B5CF6),
-                      const VocabularyPage(),
-                    ),
-                    _menuCard(
-                      context,
-                      'English Quiz',
-                      'ඔයාගේ දැනුම පරීක්ෂා කරන්න',
-                      Icons.emoji_events_rounded,
-                      const Color(0xFFEA9B32),
-                      const QuizPage(),
-                    ),
-                    _menuCard(
-                      context,
-                      'Speaking Practice',
-                      'English කතා කිරීම පුහුණු වෙන්න',
-                      Icons.record_voice_over_rounded,
-                      const Color(0xFF0E9F91),
-                      const SpeakingPage(),
-                    ),
-                    const SizedBox(height: 18),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [navy, blue, purple],
-                        ),
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: blue.withOpacity(.25),
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '🌟 Your English Journey',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Practice every day. Learn something new every day!',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Center(
-                      child: Text(
-                        'Hela Basa English Master • Learn with confidence',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.blueGrey),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Center(child: Text('Hela English • Learn with confidence',
+                    style: TextStyle(color: Colors.blueGrey))),
+                ]),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _hero(BuildContext context) {
+  Widget _hero() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 32, 24, 35),
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 30),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [navy, Color(0xFF344AC0), purple],
-        ),
+          colors: [Color(0xFF18275B), Color(0xFF4057C8), Color(0xFF7654D6)],
+          begin: Alignment.topLeft, end: Alignment.bottomRight),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(38),
-          bottomRight: Radius.circular(38),
-        ),
+          bottomLeft: Radius.circular(36), bottomRight: Radius.circular(36)),
       ),
       child: Stack(
         children: [
-          Positioned(
-            right: -35,
-            top: -45,
-            child: Container(
-              width: 155,
-              height: 155,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(.07),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 15,
-            bottom: -50,
-            child: Container(
-              width: 105,
-              height: 105,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(.07),
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.school_rounded,
-                    color: Colors.white,
-                    size: 31,
-                  ),
-                  const SizedBox(width: 10),
-                  const Expanded(
-                    child: Text(
-                      'HELA BASA',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 7,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(.16),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'LEARN',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 35),
-              const Text(
-                'ආයුබෝවන්! 🙏',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'අද ඉඳන් English ඉගෙන ගමු!',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 28),
-              Row(
-                children: [
-                  Expanded(
-                    child: _statBox(
-                      Icons.menu_book_rounded,
-                      '100',
-                      'Lessons',
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _statBox(
-                      Icons.translate_rounded,
-                      'Sinhala',
-                      'Support',
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 22),
+          Positioned(right: -20, top: -25, child: Container(
+            width: 150, height: 150,
+            decoration: BoxDecoration(shape: BoxShape.circle,
+              color: Colors.white.withOpacity(.07)))),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(.13),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(.18),
-                  ),
-                ),
-                child: const Row(
-                  children: [
-                    Text('🚀', style: TextStyle(fontSize: 29)),
-                    SizedBox(width: 13),
-                    Expanded(
-                      child: Text(
-                        'Learn English step by step.\nඔයාට පුළුවන්!',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_rounded,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _statBox(IconData icon, String value, String label) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.12),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white, size: 25),
-          const SizedBox(width: 9),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+                width: 48, height: 48,
+                decoration: BoxDecoration(color: Colors.white.withOpacity(.16),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.white24)),
+                child: const Icon(Icons.school_rounded, color: Colors.white, size: 29)),
+              const SizedBox(width: 12),
+              const Expanded(child: Text('HELA ENGLISH', style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900,
+                letterSpacing: 1.5))),
+              Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(.16),
+                  borderRadius: BorderRadius.circular(30)),
+                child: const Text('LEARN', style: TextStyle(
+                  color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold))),
+            ]),
+            const SizedBox(height: 30),
+            const Text('ආයුබෝවන්! 🙏', style: TextStyle(
+              color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
+            const SizedBox(height: 8),
+            const Text('අද ඉඳන් English ඉගෙන ගමු!',
+              style: TextStyle(color: Colors.white70, fontSize: 18)),
+            const SizedBox(height: 25),
+            Row(children: [
+              Expanded(child: _heroStat(Icons.menu_book_rounded, '100', 'Lessons')),
+              const SizedBox(width: 12),
+              Expanded(child: _heroStat(Icons.translate_rounded, 'Sinhala', 'Support')),
+            ]),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(.13),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: Colors.white24)),
+              child: const Row(children: [
+                Text('✨', style: TextStyle(fontSize: 27)),
+                SizedBox(width: 12),
+                Expanded(child: Text('Learn English step by step.\nඔයාට පුළුවන්!',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
+                Icon(Icons.arrow_forward_rounded, color: Colors.white),
+              ]),
             ),
-          ),
+          ]),
         ],
       ),
     );
   }
 
-  Widget _menuCard(
-    BuildContext context,
-    String title,
-    String subtitle,
-    IconData icon,
-    Color color,
-    Widget page,
-  ) {
+  Widget _heroStat(IconData icon, String value, String label) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(13),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(.13),
+        borderRadius: BorderRadius.circular(16)),
+      child: Row(children: [
+        Icon(icon, color: Colors.white, size: 25),
+        const SizedBox(width: 9),
+        Flexible(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(value, style: const TextStyle(color: Colors.white,
+              fontWeight: FontWeight.bold, fontSize: 16)),
+            Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          ])),
+      ]),
+    );
+  }
+
+  void _open(BuildContext context, Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+  }
+}
+
+class _FeatureCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+  const _FeatureCard({required this.title, required this.subtitle,
+    required this.icon, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
+        color: cardColor,
         borderRadius: BorderRadius.circular(23),
         boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(.13),
-            blu
+          BoxShadow(color: color.withOpacity(.13), blurRadius: 18,
+            offset: const Offset(0, 9)),
+          const BoxShadow(color: Colors.white, blurRadius: 2,
+            offset: Offset(-2, -2)),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(23),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(23),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+            child: Row(children: [
+              Container(width: 58, height: 58,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [color, color.withOpacity(.72)]),
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [BoxShadow(color: color.withOpacity(.25),
+                    blurRadius: 10, offset: const Offset(0, 5))]),
+                child: Icon(icon, color: Colors.white, size: 29)),
+              const SizedBox(width: 16),
+              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 18,
+                    color: ink, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 5),
+                  Text(subtitle, style: TextStyle(fontSize: 13,
+                    color: Colors.blueGrey.shade700)),
+                ])),
+              Icon(Icons.arrow_forward_ios_rounded, color: color, size: 21),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LessonsPage extends StatefulWidget {
+  const LessonsPage({super.key});
+  @override
+  State<LessonsPage> createState() => _LessonsPageState();
+}
+
+class _LessonsPageState extends State<LessonsPage> {
+  String search = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final shown = lessons.asMap().entries.where((entry) {
+      return entry.value.title.toLowerCase().contains(search.toLowerCase()) ||
+          entry.value.english.toLowerCase().contains(search.toLowerCase());
+    }).toList();
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('English Lessons'),
+        backgroundColor: page, foregroundColor: ink),
+      body: Column(children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(18, 8, 18, 12),
+          child: TextField(
+            onChanged: (value) => setState(() => search = value),
+            decoration: InputDecoration(
+              hintText: 'Search lessons...',
+              prefixIcon: const Icon(Icons.search),
+              filled: true, fillColor: Colors.white,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+          child: Row(children: [
+            const Expanded(child: Text('📚 English පාඩම් 1–100',
+              style: TextStyle(fontSize: 20, color: ink, fontWeight: FontWeight.w900))),
+            Text('${shown.length} lessons', style: const TextStyle(color: Colors.blueGrey)),
+          ]),
+        ),
+        Expanded(child: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(18, 5, 18, 22),
+          itemCount: shown.length,
+          itemBuilder: (context, index) {
+            final item = shown[index];
+            final lessonNumber = item.key + 1;
+            return Container(
+              margin: const EdgeInsets.only(bottom: 13),
+              decoration: BoxDecoration(color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: blue.withOpacity(.10),
+                  blurRadius: 13, offset: const Offset(0, 6))]),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 9),
+                leading: CircleAvatar(radius: 25, backgroundColor: blue,
+                  child: Text('$lessonNumber', style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold))),
+                title: Text('Lesson $lessonNumber',
+                  style: const TextStyle(color: blue, fontWeight: FontWeight.w900)),
+                subtitle: Padding(padding: const EdgeInsets.only(top: 5),
+                  child: Text(item.value.title, style: const TextStyle(fontSize: 14))),
+                trailing: const Icon(Icons.chevron_right_rounded, color: blue, size: 30),
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (_) => LessonDetailPage(index: item.key))),
+              ),
+            );
+          },
+        )),
+      ]),
+    );
+  }
+}
+
+class LessonDetailPage extends StatelessWidget {
+  final int index;
+  const LessonDetailPage({super.key, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    final lesson = lessons[index];
+    return Scaffold(
+      appBar: AppBar(title: Text('Lesson ${index + 1}'),
+        backgroundColor: page, foregroundColor: ink),
+      body: Padding(
+        padding: const EdgeInsets.all(22),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          const SizedBox(height: 12),
+          Text(lesson.title, textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 23, color: ink, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 28),
+          _learningPanel('🇬🇧 English', lesson.english, blue),
+          const SizedBox(height: 18),
+          _learningPanel('🇱🇰 සිංහල තේරුම', lesson.sinhala, violet),
+          const Spacer(),
+          Row(children: [
+            Expanded(child: OutlinedButton.icon(
+              onPressed: index == 0 ? null : () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => LessonDetailPage(index: index - 1))),
+              icon: const Icon(Icons.arrow_back), label: const Text('Previous'))),
+            const SizedBox(width: 12),
+            Expanded(child: ElevatedButton.icon(
+              onPressed: index == lessons.length - 1 ? null : () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (_) => LessonDetailPage(index: index + 1))),
+              icon: const Icon(Icons.arrow_forward), label: const Text('Next'),
+              style: ElevatedButton.styleFrom(backgroundColor: blue, foregroundColor: Colors.white))),
+          ]),
+        ]),
+      ),
+    );
+  }
+
+  Widget _learningPanel(String heading, String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: Colors.white, borderRadius: BorderRadius.circular(22),
+        boxShadow: [BoxShadow(color: color.withOpacity(.15),
+          blurRadius: 16, offset: const Offset(0, 7))],
+        border: Border.all(color: color.withOpacity(.12)),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(heading, style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 16)),
+        const SizedBox(height: 14),
+        Text(text, style: const TextStyle(fontSize: 23, color: ink, fontWeight: FontWeight.w700)),
+      ]),
+    );
+  }
+}
+
+class VocabularyPage extends StatelessWidget {
+  const VocabularyPage({super.key});
+  static const words = <List<String>>[
+    ['Apple', 'ඇපල් ගෙඩිය'], ['Book', 'පොත'], ['Beautiful', 'ලස්සන'],
+    ['Brave', 'නිර්භීත'], ['Careful', 'ප්‍රවේශම් සහිත'], ['Clean', 'පිරිසිදු'],
+    ['Come', 'එන්න'], ['Drink', 'බොන්න'], ['Eat', 'කන්න'],
+    ['Family', 'පවුල'], ['Friend', 'මිතුරා'], ['Happy', 'සතුටු'],
+    ['House', 'නිවස'], ['Learn', 'ඉගෙන ගන්න'], ['Listen', 'සවන් දෙන්න'],
+    ['Love', 'ආදරය'], ['Market', 'වෙළඳපොළ'], ['Morning', 'උදෑසන'],
+    ['Need', 'අවශ්‍යයි'], ['Open', 'විවෘත කරන්න'], ['Please', 'කරුණාකර'],
+    ['Quickly', 'ඉක්මනින්'], ['Read', 'කියවන්න'], ['School', 'පාසල'],
+    ['Speak', 'කතා කරන්න'], ['Thank you', 'ස්තුතියි'], ['Understand', 'තේරුම් ගන්න'],
+    ['Water', 'වතුර'], ['Work', 'වැඩ'], ['Yesterday', 'ඊයේ'],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Vocabulary'), backgroundColor: page, foregroundColor: ink),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(18), itemCount: words.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        itemBuilder: (context, index) => Container(
+          padding: const EdgeInsets.all(17),
+          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(17),
+            boxShadow: [BoxShadow(color: blue.withOpacity(.08), blurRadius: 10, offset: const Offset(0, 4))]),
+          child: Row(children: [
+            CircleAvatar(backgroundColor: blue.withOpacity(.12),
+              child: Text('${index + 1}', style: const TextStyle(color: blue, fontWeight: FontWeight.bold))),
+            const SizedBox(width: 14),
+            Expanded(child: Text(words[index][0], style: const TextStyle(
+              color: ink, fontSize: 17, fontWeight: FontWeight.bold))),
+            Text(words[index][1], style: const TextStyle(fontSize: 15)),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class QuizQuestion {
+  final String question;
+  final List<String> options;
+  final int answer;
+  const QuizQuestion(this.question, this.options, this.answer);
+}
+
+class QuizPage extends StatefulWidget {
+  const QuizPage({super.key});
+  @override
+  State<QuizPage> createState() => _QuizPageState();
+}
+
+class _QuizPageState extends State<QuizPage> {
+  static const questions = <QuizQuestion>[
+    QuizQuestion('“ආයුබෝවන්” සඳහා සුදුසු English වචනය කුමක්ද?',
+      ['Goodbye', 'Hello', 'Sorry', 'Please'], 1),
+    QuizQuestion('“Thank you” යන්නෙහි සිංහල තේරුම?',
+      ['සමාවෙන්න', 'සුබ රාත්‍රියක්', 'ස්තුතියි', 'ආයුබෝවන්'], 2),
+    QuizQuestion('“පොත” යන්නට English වචනය?',
+      ['Book', 'Pen', 'Chair', 'Door'], 0),
+    QuizQuestion('නිවැරදි වාක්‍යය තෝරන්න.',
+      ['I is happy.', 'I am happy.', 'I are happy.', 'I be happy.'], 1),
+    QuizQuestion('“මම වතුර බොනවා” යන්නෙහි English?',
+      ['I eat water.', 'I drink water.', 'I see water.', 'I make water.'], 1),
+  ];
+
+  int current = 0;
+  int score = 0;
+  int? selected;
+  bool finished = false;
+
+  void choose(int value) {
+    if (selected != null) return;
+    setState(() {
+      selected = value;
+      if (value == questions[current].answer) score++;
+    });
+  }
+
+  void next() {
+    if (current == questions.length - 1) {
+      setState(() => finished = true);
+    } else {
+      setState(() { current++; selected = null; });
+    }
+  }
+
+  void restart() {
+    setState(() { current = 0; score = 0; selected = null; finished = false; });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('English Quiz'), backgroundColor: page, foregroundColor: ink),
+      body: Padding(
+        padding: const EdgeInsets.all(22),
+        child: finished ? Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Icon(Icons.emoji_events_rounded, size: 76, color: Color(0xFFE6A12D)),
+          const SizedBox(height: 15),
+          const Text('Quiz Completed!', style: TextStyle(fontSize: 26, color: ink, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 10),
+          Text('ඔයාගේ ලකුණු: $score / ${questions.length}',
+            style: const TextStyle(fontSize: 21, color: blue, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 25),
+          ElevatedButton.icon(onPressed: restart, icon: const Icon(Icons.refresh),
+            label: const Text('Try Again'),
+            style: ElevatedButton.styleFrom(backgroundColor: blue, foregroundColor: Colors.white)),
+        ])) : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          LinearProgressIndicator(value: (current + 1) / questions.length,
+            minHeight: 8, borderRadius: BorderRadius.circular(10), color: blue),
+          const SizedBox(height: 18),
+          Text('Question ${current + 1} of ${questions.length}',
+            style: const TextStyle(color: blue, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 18),
+          Text(questions[current].question,
+            style: const TextStyle(color: ink, fontSize: 22, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 22),
+          ...List.generate(questions[current].options.length, (i) {
+            final isAnswer = i == questions[current].answer;
+            final isSelected = selected == i;
+            Color border = Colors.white;
+            if (selected != null && isAnswer) border = Colors.green;
+            if (isSelected && !isAnswer) border = Colors.red;
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: border, width: 2),
+                boxShadow: [BoxShadow(color: blue.withOpacity(.07), blurRadius: 8, offset: const Offset(0, 4))]),
+              child: ListTile(
+                title: Text(questions[current].options[i], style: const TextStyle(fontWeight: FontWeight.w600)),
+                trailing: selected == null ? null : Icon(isAnswer ? Icons.check_circle : (isSelected ? Icons.cancel : Icons.circle_outlined),
+                  color: isAnswer ? Colors.green : Colors.red),
+                onTap: () => choose(i),
+              ),
+            );
+          }),
+          const Spacer(),
+          if (selected != null)
+            ElevatedButton(onPressed: next,
+              style: ElevatedButton.styleFrom(backgroundColor: blue, foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 15)),
+              child: Text(current == questions.length - 1 ? 'Show Result' : 'Next Question')),
+        ]),
+      ),
+    );
+  }
+}
+
+class SpeakingPage extends StatelessWidget {
+  const SpeakingPage({super.key});
+  static const phrases = <List<String>>[
+    ['Hello! How are you?', 'හෙලෝ! ඔයාට කොහොමද?'],
+    ['My name is Kasun.', 'මගේ නම කසුන්.'],
+    ['I am learning English.', 'මම ඉංග්‍රීසි ඉගෙන ගන්නවා.'],
+    ['Could you help me, please?', 'කරුණාකර මට උදව් කරන්න පුළුවන්ද?'],
+    ['I would like a cup of tea.', 'මට තේ කෝප්පයක් අවශ්‍යයි.'],
+    ['Where is the bus stop?', 'බස් නැවතුම කොහෙද?'],
+    ['I do not understand.', 'මට තේරෙන්නේ නැහැ.'],
+    ['Please speak slowly.', 'කරුණාකර හෙමින් කතා කරන්න.'],
+    ['See you tomorrow!', 'හෙට හමුවෙමු!'],
+    ['Have a nice day!', 'සුබ දවසක් වේවා!'],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Speaking Practice'), backgroundColor: page, foregroundColor: ink),
+      body: ListView(
+        padding: const EdgeInsets.all(18),
+        children: [
+          Container(padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(gradient: const LinearGradient(colors: [ink, blue, violet]),
+              borderRadius: BorderRadius.circular(22)),
+            child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Icon(Icons.record_voice_over_rounded, color: Colors.white, size: 36),
+              SizedBox(height: 12),
+              Text('Speak English every day!', style: TextStyle(
+                color: Colors.white, fontSize: 21, fontWeight: FontWeight.bold)),
+              SizedBox(height: 6),
+              Text('වාක්‍යය කියවලා ශබ්ද නගා පුහුණු වෙන්න.',
+                style: TextStyle(color: Colors.white70)),
+            ]),
+          ),
+          const SizedBox(height: 18),
+          ...phrases.map((phrase) => Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(17),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(17),
+              boxShadow: [BoxShadow(color: blue.withOpacity(.08), blurRadius: 9, offset: const Offset(0, 4))]),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(phrase[0], style: const TextStyle(color: ink, fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 6),
+              Text(phrase[1], style: const TextStyle(color: Colors.blueGrey, fontSize: 15)),
+            ]),
+          )),
+        ],
+      ),
+    );
+  }
+}
